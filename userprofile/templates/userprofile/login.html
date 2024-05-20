@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="p-8">
+    <div class="p-4 max-w-md mx-auto bg-white rounded-xl overflow-hidden shadow-md">
+        <div class="py-4 px-4">
+            <h1 class="text-2xl font-bold mb-4">Login</h1>
+            <form method="post" action=".">
+                {% csrf_token %}
+
+                {% if form.errors %}
+                    <div class="mb-4">
+                        <p class="text-red-500">Please correct the following errors:</p>
+                        <ul>
+                            {% for field, error in form.errors.items %}
+                                {% for message in error %}
+                                    <li>{{ message }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
+                <div class="mb-4">
+                    <label for="id_username" class="block text-sm font-medium text-gray-700">Username:</label>
+                    <input type="text" name="username" id="id_username" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring  focus:ring-opacity-50" required style="border-color: #B5C5CE; focus:border-color: #B5C5CE; focus:ring-color: #B5C5CE; focus:ring-opacity: 0.5;" autofocus>
+                </div>
+
+                <div class="mb-6">
+                    <label for="id_password" class="block text-sm font-medium text-gray-700">Password:</label>
+                    <input type="password" name="password" id="id_password" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:ring-opacity-50" required style="border-color: #B5C5CE; focus:border-color: #B5C5CE; focus:ring-color: #B5C5CE; focus:ring-opacity: 0.5;">
+
+                </div>
+
+                <button type="submit" class="w-full py-2 px-4 text-white font-semibold rounded-xl focus:outline-none focus:ring-2 focus:ring-opacity-50" style="background-color: #B5C5CE; transition: background-color 0.3s ease; focus:ring-color: #B5C5CE;" onmouseover="this.style.backgroundColor='#48697C'" onmouseout="this.style.backgroundColor='#B5C5CE'">
+                    Login
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

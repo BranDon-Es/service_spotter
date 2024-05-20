@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %}My Account{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex flex-col items-center px-4 py-20">
+    <div class="w-full bg-white rounded-lg shadow-lg p-6">
+        <h1 class="text-3xl font-bold mb-4">My Account</h1>
+
+        <!-- Display Success or Error Messages -->
+        <div id="messageContainer" class="mb-4" style="display: none;"></div>
+
+        <!-- Display Username -->
+        <p class="text-lg mb-4">Welcome, <strong>{{ request.user.username }}</strong></p>
+
+        <!-- Edit Username Form (Initially Hidden) -->
+        <form id="editUsernameForm" method="post" action="{% url 'edit_username' %}" style="display: none;">
+            {% csrf_token %}
+            <label for="id_username" class="block text-sm font-medium text-gray-700 mb-2">New Username:</label>
+            <input type="text" id="id_username" name="username" value="{{ request.user.username }}"
+                   class="mb-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-400 focus:ring focus:ring-teal-400 focus:ring-opacity-50">
+            <button type="submit" class="py-2 px-4 bg-teal-600 text-white rounded-lg hover:bg-teal-700">Update</button>
+        </form>
+
+        <!-- Button to Toggle Edit Username Form -->
+        <button id="editUsernameBtn" class="mt-4 py-2 px-4 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">
+            Edit Username
+        </button>
+
+        <!-- Edit Password Form (Initially Hidden) -->
+        <form id="editPasswordForm" method="post" action="{% url 'change_password' %}" style="display: none;">
+            {% csrf_token %}
+            <label for="id_old_password" class="block text-sm font-medium text-gray-700 mb-2">Old Password:</label>
+            <input type="password" id="id_old_password" name="old_password"
+                   class="mb-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-400 focus:ring focus:ring-teal-400 focus:ring-opacity-50">
+
+            <label for="id_new_password1" class="block text-sm font-medium text-gray-700 mb-2">New Password:</label>
+            <input type="password" id="id_new_password1" name="new_password1"
+                   class="mb-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-400 focus:ring focus:ring-teal-400 focus:ring-opacity-50">
+
+            <label for="id_new_password2" class="block text-sm font-medium text-gray-700 mb-2">Confirm New Password:</label>
+            <input type="password" id="id_new_password2" name="new_password2"
+                   class="mb-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-400 focus:ring focus:ring-teal-400 focus:ring-opacity-50">
+
+            <button type="submit" class="mt-4 py-2 px-4 bg-teal-600 text-white rounded-lg hover:bg-teal-700">Update Password</button>
+        </form>
+
+        <!-- Button to Toggle Edit Password Form -->
+        <button id="editPasswordBtn" class="mt-4 py-2 px-4 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">
+            Edit Password
+        </button>
+
+        <!-- Apply for Vendor Button -->
+        {% if not request.user.userprofile.is_vendor %}
+        <form method="post" action="{% url 'apply_for_vendor' %}">
+            {% csrf_token %}
+            <button type="submit" class="inline:block mt-4 px-8 py-4 text-gray rounded-lg" style="background-color: #B5C5CE; transition: background-color 0.3s ease;" onmouseover="this.style.backgroundColor='#48697C'" onmouseout="this.style.backgroundColor='#B5C5CE'">Apply to become a vendor</button>
+        </form>
+        {% endif %}
+
+        <!-- Logout Button -->
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="inline:block mt-4 px-8 py-4 text-white rounded-lg bg-red-400 hover:bg-red-500">Log out</button>
+        </form>
+
+        <!-- Delete Account Button -->
+        <form method="post" action="{% url 'delete_account' %}">
+            {% csrf_token %}
+            <button type="submit" class="mt-4 py-3 px-6 bg-red-400 text-white rounded-lg hover:bg-red-500">Delete Account</button>
+        </form>
+
+    </div>
+</div>
+
+<script>
+    // JavaScript to toggle the visibility of the edit username form
+    document.getElementById('editUsernameBtn').addEventListener('click', function() {
+        var editUsernameForm = document.getElementById('editUsernameForm');
+        if (editUsernameForm.style.display === 'none' || editUsernameForm.style.display === '') {
+            editUsernameForm.style.display = 'block';
+        } else {
+            editUsernameForm.style.display = 'none';
+        }
+    });
+
+    // JavaScript to toggle the visibility of the edit password form
+    document.getElementById('editPasswordBtn').addEventListener('click', function() {
+        var editPasswordForm = document.getElementById('editPasswordForm');
+        if (editPasswordForm.style.display === 'none' || editPasswordForm.style.display === '') {
+            editPasswordForm.style.display = 'block';
+        } else {
+            editPasswordForm.style.display = 'none';
+        }
+    });
+
+    // JavaScript to display success or error messages
+    {% if messages %}
+        var messageContainer = document.getElementById('messageContainer');
+        messageContainer.style.display = 'block';
+        {% for message in messages %}
+            messageContainer.innerHTML += '<div class="text-sm py-1 px-2 {% if message.tags %}bg-{{ message.tags }}{% endif %}">{{ message }}</div>';
+        {% endfor %}
+    {% endif %}
+</script>
+{% endblock %}

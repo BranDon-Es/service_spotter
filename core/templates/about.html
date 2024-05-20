@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}
+About
+{% endblock %}
+
+{% block meta %}
+<meta name="description" content="Learn more about our website and the services we offer.">
+<meta name="author" content="Your Name">
+<meta property="og:title" content="Service Spotter | About">
+<meta property="og:description" content="Learn more about our website and the services we offer.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://servicespotter.com/about/">
+{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-4">About Us</h1>
+
+    <p class="text-lg mb-4">Welcome to our website! We are dedicated to providing a platform where you can discover various services and businesses conveniently.</p>
+
+    <h2 class="text-xl font-bold mb-2">Our Services</h2>
+    <p class="mb-4">Explore a wide range of services offered by businesses across different industries, including but not limited to:</p>
+    <ul class="list-disc ml-8">
+        <li>Service category 1</li>
+        <li>Service category 2</li>
+        <li>Service category 3</li>
+        <!-- Add more service categories as needed -->
+    </ul>
+
+    <h2 class="text-xl font-bold mb-2 mt-8">Contact Us</h2>
+    <p class="mb-4">If you have any questions or inquiries, please don't hesitate to reach out to us:</p>
+    <ul class="list-disc ml-8">
+        <li>Email: info@example.com</li>
+        <li>Phone: +1234567890</li>
+        <li>Address: 123 Street, City, Country</li>
+    </ul>
+
+    <h2 class="text-xl font-bold mb-2 mt-8">Our Mission</h2>
+    <p class="mb-4">At [Your Company Name], our mission is to connect users with quality services and businesses while fostering growth and success for our partners.</p>
+
+    <!-- Add more sections as needed -->
+</div>
+{% endblock %}

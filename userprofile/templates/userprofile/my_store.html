@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block title %}My Store{% endblock %}
+
+{% block content %}
+<style>
+    /* Define a height for the service cards */
+    .service {
+        height: auto; /* Adjust this value as needed */
+        margin-left: auto; /* Center the service cards horizontally */
+        margin-right: auto;
+    }
+
+    /* Media query for screens smaller than 768px (typical mobile devices) */
+    @media (max-width: 767px) {
+        .service {
+            width: 90%; /* Make the service cards occupy full width */
+            height: auto; /* Let the height adjust according to content */
+            margin-bottom: 20px; /* Add some spacing between cards */
+        }
+    }
+
+    /* Add padding to the bottom of the content container */
+    .content-container {
+        padding-bottom: 60px; /* Adjust this value to accommodate the height of the bottom bar */
+    }
+
+    /* Ensure images maintain aspect ratio */
+    .image {
+        height: 150px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    /* Center-cropping */
+    .image img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        min-width: 100%;
+        min-height: 100%;
+        width: auto;
+        height: auto;
+    }
+
+    /* Align title at the bottom of the card */
+    .title {
+        margin-top: auto;
+    }
+</style>
+
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-4">My Store</h1>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="mt-4 px-8 py-4 bg-teal-200 text-teal-800">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <a href="{% url 'add_service' %}" class="mt-8 inline-block py-4 px-8 bg-teal-500 text-white rounded-lg shadow-md hover:bg-teal-600 transition duration-300">Add New Service</a>
+
+    <h2 class="mt-6 text-xl">My Services</h2>
+
+    <div class="content-container max-w-4xl mx-auto px-3">
+        <div class="flex flex-wrap">
+            {% for service in services %}
+            <div class="service w-full sm:w-1/2 md:w-1/3 p-2">
+                <div class="bg-gray-100 rounded-lg shadow-md hover:shadow-lg transition duration-300 h-full flex flex-col">
+                    <a href="{% url 'edit_service' service.pk %}" class="block h-full">
+                        <div class="image rounded-t-lg">
+                            <img src="{{ service.get_thumbnail }}" alt="Image of {{ service.title }}" class="w-full h-full rounded-t-md">
+                        </div>
+                        <h2 class="p-3 text-lg font-semibold text-gray-800 title">{{ service.title }}</h2>
+                        <p class="p-3"><strong>Status: </strong>{{ service.get_status_display }}</p>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% if services|length == 0 %}
+        <p class="mt-4 py-4 px-8 bg-gray-200">You don't have any Services yet...</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,87 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<style>
+    /* Define a height for the service cards */
+    .service {
+        height: auto; /* Adjust this value as needed */
+        margin-left: auto; /* Center the service cards horizontally */
+        margin-right: auto;
+    }
+
+    .service-category,
+    .service-district {
+        padding-left: 0.5rem; /* Adjust padding as needed */
+        font-size: 0.8rem; /* Equivalent to 14px */
+        font-weight: 600; /* Semi-bold */
+        color: #6B7280; /* Medium gray color */
+    }
+
+    .service-district {
+        padding-bottom: 0.5rem;
+    }
+
+    /* Media query for screens smaller than 768px (typical mobile devices) */
+    @media (max-width: 767px) {
+        .service {
+            width: 90%; /* Make the service cards occupy full width */
+            height: auto; /* Let the height adjust according to content */
+            margin-bottom: 20px; /* Add some spacing between cards */
+        }
+    }
+
+    /* Add padding to the bottom of the content container */
+    .content-container {
+        padding-bottom: 60px; /* Adjust this value to accommodate the height of the bottom bar */
+    }
+
+    /* Ensure images maintain aspect ratio */
+    .image {
+        height: 150px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    /* Center-cropping */
+    .image img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        min-width: 100%;
+        min-height: 100%;
+        width: auto;
+        height: auto;
+    }
+
+    /* Align title at the bottom of the card */
+    .title {
+        margin-top: auto;
+    }
+</style>
+
+<div class="content-container max-w-4xl mx-auto px-3">
+    <div class="flex flex-wrap">
+        {% for service in services %}
+        <div class="service w-full sm:w-1/2 md:w-1/3 p-2">
+            <div class="bg-gray-100 rounded-lg shadow-md hover:shadow-lg transition duration-300 h-full flex flex-col">
+                <a href="{% url 'service_detail' service.category.slug service.slug %}" class="block h-full">
+                    <div class="image rounded-t-lg">
+                        <img src="{{ service.get_thumbnail }}" alt="Image of {{ service.title }}" class="w-full h-full rounded-t-md">
+
+                        {% if service.avg_rating %}
+                            <div class="absolute top-0 right-0 p-2">
+                                <span class="text-xs font-bold bg-white rounded px-2 py-1">
+                                    <i class="fas fa-star text-yellow-500"></i> {{ service.avg_rating }}
+                                </span>
+                            </div>
+                        {% endif %}
+
+                    </div>
+                    <h2 class="pt-2 pl-2 pr-2 text-lg font-semibold text-gray-800 title">{{ service.title }}</h2>
+                    <h3 class="service-category">{{ service.category }}</h3>
+                    <h4 class="service-district">{{ service.district }}</h4>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>

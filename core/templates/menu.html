@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dropdown Menu</title>
+    <style>
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            z-index: 9999; /* Ensure dropdown is above everything else */
+        }
+
+        .dropdown-label {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            color: black;
+            text-transform: uppercase;
+            text-decoration: none; /* Remove default underline */
+        }
+
+        /* Add underline effect on hover and when active */
+        .dropdown-label:hover,
+        .dropdown.active .dropdown-label {
+            text-decoration: underline;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 150px; /* Increase width */
+            z-index: 9999; /* Ensure dropdown is above everything else */
+            text-align: center; /* Center align items */
+            border: 1px solid #ccc; /* Add border */
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 0; /* Adjust padding */
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+
+<div class="dropdown" onclick="toggleDropdown()">
+    <div class="dropdown-label">Categories</div>
+    <div class="dropdown-content" id="dropdownContent">
+        {% for category in categories %}
+        <a href="{% url 'category_detail' category.slug %}">{{ category.title }}</a>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    function toggleDropdown() {
+        var dropdownContent = document.getElementById("dropdownContent");
+        var dropdown = document.querySelector(".dropdown");
+
+        if (dropdownContent.style.display === "block") {
+            dropdownContent.style.display = "none";
+            dropdown.classList.remove("active"); /* Remove active class */
+        } else {
+            dropdownContent.style.display = "block";
+            dropdown.classList.add("active"); /* Add active class */
+        }
+    }
+</script>
+
+</body>
+</html>

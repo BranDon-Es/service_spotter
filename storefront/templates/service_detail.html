@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+{% block title %}{{ service.title }}{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+<div class="container mx-auto py-8 px-4 pb-20">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Service image -->
+        {% if service.image %}
+        <div class="w-full md:w-2/3 image-container">
+            <img src="{{ service.image.url }}" alt="Image of {{ service.title }}"
+                 class="rounded-lg shadow-lg w-full md:h-auto">
+        </div>
+        {% endif %}
+        <div class="md:col-span-1">
+            <!-- Service details -->
+            <h1 class="text-3xl font-bold mb-4">{{ service.title }}</h1>
+            <div class="flex items-center mb-4">
+                <div class="rating" data-rating="{{ avg_rating }}">
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                </div>
+                <span class="text-lg font-semibold ml-2">{{ avg_rating }}</span>
+            </div>
+            <p class="text-sm text-gray-600 mb-2">
+                <a href="{% url 'vendor_detail' service.user.id %}" class="text-teal-500 hover:underline">
+                    {% firstof service.user.get_full_name service.user.username %}
+                </a>
+            </p>
+            <p class="text-gray-700 mb-4">Located in {{ service.district }}</p>
+            <p class="text-gray-700 mb-4">{{ service.precise_location }}</p>
+            {% if service.description %}
+            <p class="text-lg text-gray-800">{{ service.description }}</p>
+            {% endif %}
+            <!-- Make appointment button -->
+            <div class="mt-8">
+                <a href="{% url 'make_appointment' service.id %}" class="inline:block mt-4 px-8 py-4 text-white rounded-lg" style="background-color: #B5C5CE; transition: background-color 0.3s ease;" onmouseover="this.style.backgroundColor='#48697C'" onmouseout="this.style.backgroundColor='#B5C5CE'">Make Appointment</button></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-12">
+        <h2 class="text-2xl font-bold mb-4">Reviews</h2>
+        <div class="space-y-6">
+            <!-- Individual reviews with star ratings -->
+            {% for review in reviews %}
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <div class="mb-2">
+                        <span class="pl-2 text-lg font-semibold text-gray-800">{{ review.user.username }}</span>
+                    </div>
+                    <div class="flex justify-between items-center mb-2">
+                        <div class="flex items-center">
+                            <span class="text-lg font-semibold mr-2"></span>
+                            <div class="rating" data-rating="{{ review.rating }}">
+                                <span class="fa fa-star"></span>
+                                <span class="fa fa-star"></span>
+                                <span class="fa fa-star"></span>
+                                <span class="fa fa-star"></span>
+                                <span class="fa fa-star"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="pl-2 text-gray-800 max-w-full md:max-w-sm overflow-hidden overflow-ellipsis md:overflow-visible md:overflow-clip">{{ review.comment }}</p>
+                </div>
+            {% empty %}
+                <p class="text-gray-700">No reviews yet.</p>
+            {% endfor %}
+        </div>
+
+         <!-- Your existing add review form -->
+        {% if user.is_authenticated %}
+
+            {% if not user_review %}
+            <!-- Add Review Form -->
+            <div class="mt-12">
+                <h2 class="text-2xl font-bold mb-4">Add Review</h2>
+                <div class="bg-gray-100 p-6 rounded-lg">
+                    <form method="post">
+                        {% csrf_token %}
+                        <!-- Star rating input -->
+                        <label class="block text-lg text-gray-700 mb-2">Rating:</label>
+                        <div class="stars">
+                            <span class="fa fa-star" data-rating="1"></span>
+                            <span class="fa fa-star" data-rating="2"></span>
+                            <span class="fa fa-star" data-rating="3"></span>
+                            <span class="fa fa-star" data-rating="4"></span>
+                            <span class="fa fa-star" data-rating="5"></span>
+                            <input type="hidden" name="rating" id="rating" value="">
+                        </div>
+                        <!-- Review comment -->
+                        <label class="block text-lg text-gray-700 mb-2">Review:</label>
+                        <textarea name="comment" class="w-full md:max-w-sm" rows="10" required="" id="comment" spellcheck="false"></textarea>
+                        <!-- Submit button -->
+                        <div>
+                            <button type="submit" class="mt-6 px-6 py-3 text-white rounded-lg" style="background-color: #B5C5CE; transition: background-color 0.3s ease;" onmouseover="this.style.backgroundColor='#48697C'" onmouseout="this.style.backgroundColor='#B5C5CE'">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            {% else %}
+        <div class="pt-4">
+            <div class="bg-gray-100 p-4 rounded-lg">
+                <div class="mb-2">
+                    <span class="pl-2 text-lg font-semibold text-gray-800">Your Review</span>
+                </div>
+                <div class="flex justify-between items-center mb-2">
+                    <div class="flex items-center">
+                        <span class="text-lg font-semibold mr-2"></span>
+                        <div class="rating" data-rating="{{ user_review.rating }}">
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                        </div>
+                    </div>
+                </div>
+                <p class="pl-2 mb-2 text-gray-800 max-w-full md:max-w-sm overflow-hidden overflow-ellipsis md:overflow-visible md:overflow-clip">{{ user_review.comment }}</p>
+                <a href="#" class="pl-2 text-black underline edit-review" data-review-id="{{ user_review.id }}">Edit Review</a>
+            </div>
+        </div>
+            {% endif %}
+
+        {% else %}
+            <!-- Prompt to log in if not authenticated -->
+            <p class="mt-8 text-gray-700">Please <a href="{% url 'login' %}" class="text-teal-500 hover:underline">log in</a> to leave a review.</p>
+        {% endif %}
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function(){
+    // Fill the stars based on the rating when the page loads
+    $('.rating').each(function() {
+        var rating = $(this).data('rating');
+        var stars = $(this).children('span.fa-star');
+
+        for (i = 0; i < stars.length; i++) {
+            if (i < rating) {
+                $(stars[i]).addClass('text-yellow-500');
+                $(stars[i]).removeClass('text-gray-500');
+            } else {
+                $(stars[i]).removeClass('text-yellow-500');
+                $(stars[i]).addClass('text-gray-500');
+            }
+        }
+    });
+
+    /* 1. Visualizing things on Hover - See next part for action on click */
+    $('.stars span').on('mouseover', function(){
+        var onStar = parseInt($(this).data('rating'), 10); // The star currently mouse on
+
+        // Now highlight all the stars that's not after the current hovered star
+        $(this).parent().children('span.fa-star').each(function(e){
+            if (e < onStar) {
+                $(this).addClass('text-yellow-500');
+                $(this).removeClass('text-gray-500');
+            }
+            else {
+                $(this).removeClass('text-yellow-500');
+                $(this).addClass('text-gray-500');
+            }
+        });
+    }).on('mouseout', function(){
+        var rating = parseInt($('#rating').val(), 10);
+        setRating(rating);
+    });
+
+    /* 2. Action to perform on click */
+    $('.stars span').on('click', function(){
+        var onStar = parseInt($(this).data('rating'), 10); // The star currently selected
+        setRating(onStar);
+        $('#rating').val(onStar);
+    });
+
+    function setRating(rating) {
+        var stars = $('.stars').children('span.fa-star');
+
+        for (i = 0; i < stars.length; i++) {
+            $(stars[i]).removeClass('text-yellow-500');
+            $(stars[i]).addClass('text-gray-500');
+        }
+
+        for (i = 0; i < rating; i++) {
+            $(stars[i]).removeClass('text-gray-500');
+            $(stars[i]).addClass('text-yellow-500');
+        }
+    }
+});
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto py-3 px-3">
+    <h1 class="text-3xl font-bold mb-4">Search</h1>
+
+    <h2 class="text-lg text-gray-600 mb-2">Search results for "{{ query }}":</h2>
+
+    {% if services %}
+            {% include 'partials/services.html' %}
+    {% else %}
+        <p class="text-lg">There are no services matching this query!</p>
+    {% endif %}
+</div>
+{% endblock %}

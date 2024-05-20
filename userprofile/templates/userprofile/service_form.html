@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Add service{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl">{{ title }}</h1>
+
+<form method='post' action="." enctype="multipart/form-data" class="space-y-5">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <button class="mt-2 inline-block py-4 px-8 bg-teal-500 text-white hover:bg-teal-800">Submit</button>
+</form>
+{% if service %}
+<a href="{% url 'delete_service' service.id %}" class="mt-2 inline-block py-4 px-8 bg-red-500 text-white">Delete</a>
+{% endif %}
+{% endblock %}

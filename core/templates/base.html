@@ -1,0 +1,211 @@
+{% load menu %}
+
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}{% endblock %} | Service Spotter
+    </title>
+
+    {% block meta %}
+    {% endblock %}
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-XwJ+TiBo6vao6aWxBOo/B6L0jt7Yw0pP2CkvjB8A/IZBKuz+PbldWT1tjm2vBsDwKNO1OkpuPjo/WmGrFFW8kg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        /* Apply Open Sans font to all text */
+        body, h1, h2, h3, h4, h5, h6, p, a {
+            font-family: 'Open Sans', sans-serif;
+            margin: 0; /* Reset margin */
+            padding: 0;
+        }
+
+        html {
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        *, *:before, *:after {
+            box-sizing: inherit;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        .content {
+            flex: 1;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        nav + div {
+            margin-top: 60px; /* Adjust the value to match the height of your navigation bar */
+        }
+
+        /* Footer styles */
+        footer {
+            margin-top: auto;
+            background-color: #EDEDED;
+            padding: 20px;
+        }
+        footer a {
+            display: block;
+            margin-right: 10px;
+            color: #000;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Adjustments for search and menu alignment */
+        .search-form {
+            margin-right: 10px; /* Add some margin to the right of the search form */
+        }
+
+        @media (max-width: 768px) {
+            .search-form {
+                margin-right: 0; /* Remove margin on smaller screens */
+                margin-bottom: 10px; /* Add margin bottom to separate from menu on smaller screens */
+            }
+
+            .menu {
+                display: none; /* Hide the menu by default on small screens */
+                flex-direction: column; /* Stack menu items vertically */
+                position: absolute; /* Position menu absolutely */
+                top: 64px; /* Adjust the top position as needed */
+                right: 0; /* Align menu to the right */
+                background-color: #f3f4f6; /* gray-100 */
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow */
+                padding: 10px; /* Add padding to menu */
+                border-radius: 10px; /* Add border-radius for rounded corners */
+                z-index: 1000; /* Ensure menu is above other content */
+            }
+
+            .menu.show {
+                display: flex; /* Show the menu when .show class is added */
+            }
+
+            .menu a {
+                margin-bottom: 10px; /* Add margin between menu items */
+                color: #000000; /* Set menu item color to black */
+            }
+
+            .menu .search-form {
+                margin-bottom: 10px; /* Add margin bottom to separate search form from menu items */
+            }
+
+            .menu .search-form button {
+                background-color: #5B666C;
+                border: none; /* Remove border */
+            }
+
+            .menu .menu-icon {
+                display: block; /* Display hamburger menu icon */
+            }
+        }
+
+        @media (min-width: 769px) {
+            .menu {
+                display: flex !important; /* Show the menu as flex for desktop view */
+                flex-direction: row; /* Align menu items horizontally */
+            }
+
+            .menu .menu-icon {
+                display: none; /* Hide the hamburger menu icon on desktop view */
+            }
+        }
+    </style>
+
+</head>
+<body>
+
+    <nav class="mx-auto py-3 px-5 flex items-center justify-between"
+         style="background: #B5C5CE;">
+        <div class="logo">
+            <a href="/">
+                <img src="/media/logo.png" alt="WebShop Logo" class="h-10 w-auto">
+            </a>
+        </div>
+
+        <div class="menu-icon block cursor-pointer md:hidden">
+            <svg class="h-6 w-6 fill-current text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path fill-rule="evenodd" d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/>
+            </svg>
+        </div>
+
+        <div class="menu flex items-center space-x-4 md:space-x-8 md:block hidden">
+            <div class="search-form">
+                <form method="get" action="/search/"
+                      class="flex items-center border border-white rounded-xl overflow-hidden">
+                    <input type="search" name='query' placeholder="Search..."
+                           class="py-2 px-4 flex-grow outline-none bg-white text-gray-800">
+                    <button type="submit" class="px-4 py-2 text-white flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                             class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+
+            {% menu %}
+
+            {% if not request.user.is_authenticated %}
+            <a href="{% url 'signup' %}">
+                <span class="hover:underline">SIGN UP</span>
+            </a>
+            <a href="{% url 'login' %}">
+                <span class="hover:underline">LOG IN</span>
+            </a>
+            {% else %}
+            <a href="{% url 'myaccount' %}">
+                <span class="hover:underline">MY ACCOUNT</span>
+            </a>
+
+            {% if request.user.userprofile.is_vendor %}
+            <a href="{% url 'my_store' %}">
+                <span class="hover:underline">MY STORE</span>
+            </a>
+            {% endif %}
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <footer>
+        <a href="{% url 'about' %}">About Service Spotter</a>
+    </footer>
+</body>
+
+<script>
+    // Toggle mobile menu
+    document.querySelector('.menu-icon').addEventListener('click', function() {
+        document.querySelector('.menu').classList.toggle('show');
+    });
+</script>
+
+</html>
+

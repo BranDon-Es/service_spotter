@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Welcome
+{% endblock %}
+
+{% block meta %}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap">
+{% endblock %}
+
+{% block content %}
+<style>
+    /* Hero Section */
+    .hero-image {
+        background-color: #B5C5CE;
+        position: relative;
+        overflow: hidden;
+        height: 80vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+
+
+    .hero-text {
+        z-index: 1;
+
+    }
+
+    .hero-text h1 {
+        color: #48597C;
+        font-size: 3.5rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+        line-height: 1.2;
+    }
+
+    .hero-text p {
+        color: black;
+        font-size: 2rem;
+        font-weight: lighter;
+        font-family: 'Merriweather', serif;
+        line-height: 1.5;
+    }
+
+    .services-container {
+        position: relative;
+        z-index: 2;
+        background-color: #ffffff;
+        padding: 40px;
+        border-radius: 0px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        margin-top: -100px; /* Adjust to overlap with hero section */
+    }
+
+    @media (max-width: 768px) {
+        .hero-text h1 {
+            font-size: 2.5rem;
+        }
+        .hero-text p {
+            font-size: 1.5rem;
+        }
+        .services-container {
+            padding: 20px;
+            margin-top: -80px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .hero-text h1 {
+            font-size: 2rem;
+        }
+        .hero-text p {
+            font-size: 1.25rem;
+        }
+        .services-container {
+            padding: 15px;
+            margin-top: -60px;
+        }
+    }
+</style>
+
+<div class="hero-image">
+    <div class="fade-overlay"></div>
+    <div class="hero-text">
+        <h1>Discover premier local services</h1>
+        <p>Just a click away</p>
+    </div>
+</div>
+
+<div class="services-container">
+    {% include 'partials/services.html' %}
+</div>
+{% endblock %}
